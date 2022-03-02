@@ -10,4 +10,4 @@ COPY . .
 
 RUN pip install -r requirements.txt
 
-ENTRYPOINT ["python", "send-email.py"]
+ENTRYPOINT ["/send-email.py"]

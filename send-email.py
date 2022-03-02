@@ -1,3 +1,5 @@
+#!/usr/local/bin/python
+
 import argparse
 
 import markdown
