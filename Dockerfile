@@ -4,8 +4,6 @@ LABEL author="Meysam Azad <meysam@licenseware.io>"
 
 ENV PYTHONUNBUFFERED=1
 
-WORKDIR /app
-
 RUN pip install -U pip
 
 COPY . .
