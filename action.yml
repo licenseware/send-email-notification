@@ -1,0 +1,22 @@
+name: 'Send Email With SendGrid'
+description: 'Using python library, send an email to SendGrid API'
+inputs:
+  from-email:
+    required: true
+  to-email:
+    required: true
+  api-key:
+    required: true
+  subject:
+    required: true
+  markdown-body:
+    required: true
+
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - --from-email=${{ inputs.from-email }}
+    - --to-email=${{ inputs.to-email }}
+    - --subject=${{ inputs.subject }}
+    - --markdown-body=${{ inputs.markdown-body }}
