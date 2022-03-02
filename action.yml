@@ -16,7 +16,7 @@ runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - --api-key={{ inputs.api-key }}
+    - --api-key=${{ inputs.api-key }}
     - --from=${{ inputs.from-email }}
     - --to=${{ inputs.to-email }}
     - --subject=${{ inputs.subject }}
