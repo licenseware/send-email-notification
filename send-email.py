@@ -1,6 +1,7 @@
 #!/usr/local/bin/python
 
 import argparse
+import sys
 
 import markdown
 from sendgrid import SendGridAPIClient
@@ -17,7 +18,9 @@ parser.add_argument(
     help="Email address to send the notification to",
 )
 parser.add_argument("--subject", type=str, required=True, help="Subject of the email")
-parser.add_argument("--markdown-body", type=str, required=True, help="Body of the email")
+parser.add_argument(
+    "--markdown-body", type=str, required=True, help="Body of the email"
+)
 parser.add_argument(
     "--from",
     dest="from_email",
@@ -43,6 +46,6 @@ if __name__ == "__main__":
         print(response.status_code)
         print(response.body)
         print(response.headers)
-    except Exception as e:
-        print(e.message)
+    except Exception as exp:
+        sys.stderr.write(f"{exp}\n")
         exit(1)
