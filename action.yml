@@ -16,7 +16,7 @@ runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - --from-email=${{ inputs.from-email }}
-    - --to-email=${{ inputs.to-email }}
+    - --from=${{ inputs.from-email }}
+    - --to=${{ inputs.to-email }}
     - --subject=${{ inputs.subject }}
     - --markdown-body=${{ inputs.markdown-body }}
