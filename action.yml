@@ -1,5 +1,9 @@
 name: 'Send Email With SendGrid'
+author: 'meysam@licenseware.io'
 description: 'Using python library, send an email to SendGrid API'
+branding:
+  icon: 'info'
+  color: 'green'
 inputs:
   from-email:
     required: true
