@@ -101,7 +101,9 @@ def is_attachment_requested(attachments: list):
 
 def convert_to_list(arg: str):
     """Converts a \n separated string to a list"""
-    return list(map(lambda s: s.strip().strip("\n"), arg.split("\n")))
+    is_not_empty = lambda s: bool(s)
+    extract_str = lambda s: s.strip().strip("\n")
+    return list(filter(is_not_empty, map(extract_str, arg.split("\n"))))
 
 
 if __name__ == "__main__":
