@@ -80,7 +80,8 @@ def add_attachments(message: Mail, attachments: list, dispositions: list):
     elif len(attachments) != len(dispositions):
         raise ValueError("Number of attachments and dispositions must be the same")
     for filepath, disposition in zip(attachments, dispositions):
-        filepath = filepath.strip("\n")
+        filepath = filepath.strip().strip("\n")
+        disposition = disposition.strip().strip("\n")
         with open(filepath, "rb") as f:
             file_content = f.read()
         encoded_file = base64.b64encode(file_content).decode()
