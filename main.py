@@ -23,6 +23,7 @@ from sendgrid.helpers.mail import (
 class AttachmentDisposition(str, enum.Enum):
     INLINE = "inline"
     ATTACHMENT = "attachment"
+    EMPTY = ""  # no disposition provided by the user (default CLI behavior)
 
     def __str__(self):
         return self.value
@@ -69,6 +70,9 @@ parser.add_argument(
 
 
 def add_attachments(message: Mail, attachments: list, dispositions: list):
+    if len(dispositions) == 1 and dispositions[0] == AttachmentDisposition.EMPTY:
+        dispositions = []
+
     if not dispositions:
         dispositions = [AttachmentDisposition.ATTACHMENT] * len(attachments)
     elif len(dispositions) == 1:
@@ -91,6 +95,10 @@ def add_attachments(message: Mail, attachments: list, dispositions: list):
         message.add_attachment(attachment)
 
 
+def is_attachment_requested(attachments: list):
+    return bool(attachments) and attachments != [""]
+
+
 if __name__ == "__main__":
     args = parser.parse_args()
     print(args)
@@ -102,7 +110,7 @@ if __name__ == "__main__":
         html_content=markdown.markdown(args.markdown_body),
     )
 
-    if args.attachments:
+    if is_attachment_requested(args.attachments):
         add_attachments(message, args.attachments, args.attachments_disposition)
 
     try:

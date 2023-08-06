@@ -31,5 +31,5 @@ runs:
     - --to=${{ inputs.to-email }}
     - --subject=${{ inputs.subject }}
     - --markdown-body=${{ inputs.markdown-body }}
-    - $([[ "${{ inputs.attachments }}" != "" ]] && echo "--attachments ${{ inputs.attachments }}")
-    - $([[ "${{ inputs.attachments-disposition }}" != "" ]] && echo "--attachments-disposition ${{ inputs.attachments-disposition }}")
+    - --attachments=${{ inputs.attachments }}
+    - --attachments-disposition=${{ inputs.attachments-disposition }}
