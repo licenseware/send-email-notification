@@ -52,7 +52,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           push: true
           tags: |
-            ${{ env.REGISTRY }}/${{ github.repository }}:${{ needs.image-tag.outputs.image-tag }}
+            ${{ env.REGISTRY }}/${{ github.repository }}:${{ steps.image-tag.outputs.image-tag }}
             ${{ env.REGISTRY }}/${{ github.repository }}:latest
 
       - if: github.event_name == 'release' && github.event.action == 'published'
