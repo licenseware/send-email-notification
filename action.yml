@@ -30,6 +30,6 @@ runs:
     - --from=${{ inputs.from-email }}
     - --to=${{ inputs.to-email }}
     - --subject=${{ inputs.subject }}
-    - --markdown-body=${{ inputs.markdown-body }}
     - --attachments=${{ inputs.attachments }}
     - --attachments-disposition=${{ inputs.attachments-disposition }}
+    - --markdown-body=${{ inputs.markdown-body }}
