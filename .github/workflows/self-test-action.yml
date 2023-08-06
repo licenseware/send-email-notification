@@ -20,8 +20,8 @@ jobs:
         with:
           api-key: ${{ secrets.SENDGRID_API_KEY }}
           subject: Self Test Action 1 | ${{ github.ref_name }}-${{ github.run_id }}
-          from: ${{ secrets.SENDGRID_FROM_EMAIL }}
-          to: ${{ secrets.SENDGRID_TO_EMAIL }}
+          from-email: ${{ secrets.SENDGRID_FROM_EMAIL }}
+          to-email: ${{ secrets.SENDGRID_TO_EMAIL }}
           markdown-body: |
             # Hello World
 
@@ -32,8 +32,8 @@ jobs:
         with:
           api-key: ${{ secrets.SENDGRID_API_KEY }}
           subject: Self Test Action 2 | ${{ github.ref_name }}-${{ github.run_id }}
-          from: ${{ secrets.SENDGRID_FROM_EMAIL }}
-          to: ${{ secrets.SENDGRID_TO_EMAIL }}
+          from-email: ${{ secrets.SENDGRID_FROM_EMAIL }}
+          to-email: ${{ secrets.SENDGRID_TO_EMAIL }}
           markdown-body: |
             # Hello again
 
