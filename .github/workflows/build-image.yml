@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+  release:
+    types:
+      - published
 
 env:
   REGISTRY: ghcr.io
@@ -36,12 +39,28 @@ jobs:
           images: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_REPOSITORY }}
 
-      - name: Build image
+      - id: image-tag
+        name: Set image tag
+        run: |
+          echo "image-tag=$(echo ${{ github.sha }} | cut -c 1-7 )" >> $GITHUB_OUTPUT
+
+      - if: github.ref == 'refs/heads/main'
+        name: Build image (edge)
         uses: docker/build-push-action@v3
-        env:
-          IMAGE_TAG: ${{ env.REGISTRY }}/${{ github.repository }}:latest
         with:
           context: .
           labels: ${{ steps.meta.outputs.labels }}
           push: true
-          tags: ${{ env.IMAGE_TAG }}
+          tags: |
+            ${{ env.REGISTRY }}/${{ github.repository }}:${{ needs.image-tag.outputs.image-tag }}
+            ${{ env.REGISTRY }}/${{ github.repository }}:latest
+
+      - if: github.event_name == 'release' && github.event.action == 'published'
+        name: Build image (stable)
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          labels: ${{ steps.meta.outputs.labels }}
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ github.repository }}:${{ github.ref_name }}

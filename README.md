@@ -1,7 +1,7 @@
 # Send Email Notification
 
-[![Build Image](https://github.com/licenseware/send-email-notification/actions/workflows/build-image.yml/badge.svg)](https://github.com/licenseware/send-email-notification/actions/workflows/build-image.yml)
-[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
+[![Build Image](https://github.com/licenseware/send-email-notification/actions/workflows/build-image.yml/badge.svg)](https://github.com/licenseware/send-email-notification/pkgs/container/send-email-notification)
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](./.pre-commit-config.yaml)
 
 Using [the Python library](https://pypi.org/project/sendgrid/), send email to people
 with the content & subject of your choice.
