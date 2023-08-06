@@ -58,23 +58,4 @@ jobs:
           subject: self-test-1 | ${{ github.repository }}:${{ github.ref_name }}-${{ github.run_id }}
           from-email: ${{ secrets.SENDGRID_FROM_EMAIL }}
           to-email: ${{ secrets.SENDGRID_TO_EMAIL }}
-          markdown-body: |
-            # Hello World
-
-            This is a test email from self-test-action
-
-      - name: Send email with attachments
-        uses: licenseware/send-email-notification@v1
-        with:
-          api-key: ${{ secrets.SENDGRID_API_KEY }}
-          subject: self-test-2 | ${{ github.repository }}:${{ github.ref_name }}-${{ github.run_id }}
-          from-email: ${{ secrets.SENDGRID_FROM_EMAIL }}
-          to-email: ${{ secrets.SENDGRID_TO_EMAIL }}
-          markdown-body: |
-            # Hello again
-
-            Check the following sources
-          attachments: |
-            Dockerfile
-            main.py
-          attachments-disposition: inline
+          markdown-body: ${{ github.event.release.body }}
