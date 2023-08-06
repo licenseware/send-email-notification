@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
   action:
@@ -16,7 +13,7 @@ jobs:
         name: Checkout
 
       - name: Send normal email
-        uses: licenseware/send-email-notification@ba4d621b8071939e7b586e1aa6e0479b95ad449c
+        uses: licenseware/send-email-notification@main
         with:
           api-key: ${{ secrets.SENDGRID_API_KEY }}
           subject: self-test-1 | ${{ github.repository }}:${{ github.ref_name }}-${{ github.run_id }}
@@ -28,7 +25,7 @@ jobs:
             This is a test email from self-test-action
 
       - name: Send email with attachments
-        uses: licenseware/send-email-notification@ba4d621b8071939e7b586e1aa6e0479b95ad449c
+        uses: licenseware/send-email-notification@main
         with:
           api-key: ${{ secrets.SENDGRID_API_KEY }}
           subject: self-test-2 | ${{ github.repository }}:${{ github.ref_name }}-${{ github.run_id }}
