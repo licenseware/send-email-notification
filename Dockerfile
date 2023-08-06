@@ -12,4 +12,4 @@ RUN apk add --update libmagic && \
 
 COPY main.py ./
 
-ENTRYPOINT ["./main.py"]
+ENTRYPOINT ["/app/main.py"]
