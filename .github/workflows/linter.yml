@@ -1,10 +1,15 @@
-name: Run linters
+name: linter
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   linter:
-    name: Build image
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -12,8 +17,8 @@ jobs:
 
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
-          architecture: 'x64'
+          python-version: "3.11"
+          architecture: "x64"
 
       - name: Run linters
         run: |

@@ -1,9 +1,9 @@
-name: 'Send Email With SendGrid'
-author: 'meysam@licenseware.io'
-description: 'Using python library, send an email to SendGrid API'
+name: "Send Email With SendGrid"
+author: "meysam@licenseware.io"
+description: "Using python library, send an email to SendGrid API"
 branding:
-  icon: 'info'
-  color: 'green'
+  icon: "info"
+  color: "green"
 inputs:
   from-email:
     required: true
@@ -15,13 +15,21 @@ inputs:
     required: true
   markdown-body:
     required: true
+  attachments:
+    required: false
+    description: "Space separated list of attachments"
+  attachments-disposition:
+    required: false
+    description: "inline or attachment"
 
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
+  using: "docker"
+  image: "Dockerfile"
   args:
     - --api-key=${{ inputs.api-key }}
     - --from=${{ inputs.from-email }}
     - --to=${{ inputs.to-email }}
     - --subject=${{ inputs.subject }}
     - --markdown-body=${{ inputs.markdown-body }}
+    - $([[ "${{ inputs.attachments }}" != "" ]] && echo "--attachments ${{ inputs.attachments }}")
+    - $([[ "${{ inputs.attachments-disposition }}" != "" ]] && echo "--attachments-disposition ${{ inputs.attachments-disposition }}")

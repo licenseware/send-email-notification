@@ -51,36 +51,49 @@ parser.add_argument(
 )
 parser.add_argument("--api-key", type=str, required=True, help="SendGrid API key")
 parser.add_argument(
-    "--attachments", type=str, nargs="*", help="File paths to attach to the email"
+    "--attachments",
+    type=str,
+    nargs="*",
+    help="Space separated file paths to attach to the email",
 )
 parser.add_argument(
-    "--attachment-disposition",
+    "--attachments-disposition",
     type=str,
-    help="Attachment disposition (default: attachment)",
+    nargs="*",
+    help="Attachment disposition (default: attachment). Specify only one to apply to all attachments, or none at all to use the default.",
     choices=list(AttachmentDisposition),
-    default=AttachmentDisposition.ATTACHMENT,
+    # the default is not approved by the author of this code, but we don't want
+    # to confuse the user by having different defaults than that of the SendGrid.
+    default=[AttachmentDisposition.ATTACHMENT],
 )
 
 
-def add_attachments(message: Mail, attachments: list, disposition: str):
-    for filepath in attachments:
+def add_attachments(message: Mail, attachments: list, dispositions: list):
+    if not dispositions:
+        dispositions = [AttachmentDisposition.ATTACHMENT] * len(attachments)
+    elif len(dispositions) == 1:
+        dispositions = [dispositions[0]] * len(attachments)
+    elif len(attachments) != len(dispositions):
+        raise ValueError("Number of attachments and dispositions must be the same")
+    for filepath, disposition in zip(attachments, dispositions):
         with open(filepath, "rb") as f:
-            data = f.read()
-            f.close()
-        encoded_file = base64.b64encode(data).decode()
+            file_content = f.read()
+        encoded_file = base64.b64encode(file_content).decode()
         mimetype = magic.from_file(filepath, mime=True)
         filename = pathlib.Path(filepath).name
-        message.attachment = Attachment(
+        attachment = Attachment(
             FileContent(encoded_file),
-            FileName(filepath),
+            FileName(filename),
             FileType(mimetype),
             Disposition(disposition),
             ContentId(filename),
         )
+        message.add_attachment(attachment)
 
 
 if __name__ == "__main__":
     args = parser.parse_args()
+    print(args)
 
     message = Mail(
         from_email=args.from_email,
@@ -90,7 +103,7 @@ if __name__ == "__main__":
     )
 
     if args.attachments:
-        add_attachments(message, args.attachments)
+        add_attachments(message, args.attachments, args.attachments_disposition)
 
     try:
         sg = SendGridAPIClient(args.api_key)

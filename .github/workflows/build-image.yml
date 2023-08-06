@@ -1,4 +1,4 @@
-name: Build Image
+name: build-docker-image
 
 on:
   push:
@@ -9,8 +9,7 @@ env:
   REGISTRY: ghcr.io
 
 jobs:
-  build-image:
-    name: Build image
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -30,13 +29,19 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           logout: false
 
+      - name: Docker metadata
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_REPOSITORY }}
+
       - name: Build image
         uses: docker/build-push-action@v3
         env:
           IMAGE_TAG: ${{ env.REGISTRY }}/${{ github.repository }}:latest
         with:
           context: .
+          labels: ${{ steps.meta.outputs.labels }}
           push: true
           tags: ${{ env.IMAGE_TAG }}
-          labels: |
-            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}

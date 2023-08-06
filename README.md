@@ -56,3 +56,23 @@ jobs:
           markdown-body: ${{ github.event.release.body }}
 
 ```
+
+## Send email with attachments
+
+```yaml
+      - uses: licenseware/send-email-notification@v1
+        with:
+          api-key: ${{ secrets.SENDGRID_API_KEY }}
+          subject: Test Subject
+          from-email: verified-email@licenseware.io
+          to-email: some-dude@licenseware.io
+          markdown-body: |
+            Hey, check out this file
+          attachments: |
+            ./path/to/file1.txt
+            ./path/to/file2.txt
+          # optionally, a list of zero, one, or the same size {inline, attachment}
+          attachments-disposition: |
+            attachment
+            attachment
+```
