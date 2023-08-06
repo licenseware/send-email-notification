@@ -16,7 +16,7 @@ jobs:
         name: Checkout
 
       - name: Send normal email
-        uses: licenseware/send-email-notification@f7164883bcd61b301cc579544b9c77cbd91b5490
+        uses: licenseware/send-email-notification@5cbe6485a6fa0b5871d6086d9018d9a55c2a7aec
         with:
           api-key: ${{ secrets.SENDGRID_API_KEY }}
           subject: Self Test Action 1 | ${{ github.ref_name }}-${{ github.run_id }}
@@ -28,7 +28,7 @@ jobs:
             This is a test email from self-test-action
 
       - name: Send email with attachments
-        uses: licenseware/send-email-notification@f7164883bcd61b301cc579544b9c77cbd91b5490
+        uses: licenseware/send-email-notification@5cbe6485a6fa0b5871d6086d9018d9a55c2a7aec
         with:
           api-key: ${{ secrets.SENDGRID_API_KEY }}
           subject: Self Test Action 2 | ${{ github.ref_name }}-${{ github.run_id }}
