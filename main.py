@@ -70,7 +70,7 @@ parser.add_argument(
 
 
 def add_attachments(message: Mail, attachments: list, dispositions: list):
-    if len(dispositions) == 1 and dispositions[0] == AttachmentDisposition.EMPTY:
+    if len(dispositions) == 1 and dispositions[0] == AttachmentDisposition.EMPTY.value:
         dispositions = []
 
     if not dispositions:
@@ -80,8 +80,6 @@ def add_attachments(message: Mail, attachments: list, dispositions: list):
     elif len(attachments) != len(dispositions):
         raise ValueError("Number of attachments and dispositions must be the same")
     for filepath, disposition in zip(attachments, dispositions):
-        filepath = filepath.strip().strip("\n")
-        disposition = disposition.strip().strip("\n")
         with open(filepath, "rb") as f:
             file_content = f.read()
         encoded_file = base64.b64encode(file_content).decode()
@@ -101,6 +99,11 @@ def is_attachment_requested(attachments: list):
     return bool(attachments) and attachments != [""]
 
 
+def convert_to_list(arg: str):
+    """Converts a \n separated string to a list"""
+    return list(map(lambda s: s.strip().strip("\n"), arg.split("\n")))
+
+
 if __name__ == "__main__":
     args = parser.parse_args()
     print(args)
@@ -111,6 +114,16 @@ if __name__ == "__main__":
         subject=args.subject,
         html_content=markdown.markdown(args.markdown_body),
     )
+
+    if args.attachments and len(args.attachments) == 1 and "\n" in args.attachments[0]:
+        args.attachments = convert_to_list(args.attachments[0])
+
+    if (
+        args.attachments_disposition
+        and len(args.attachments_disposition) == 1
+        and "\n" in args.attachments_disposition[0]
+    ):
+        args.attachments_disposition = convert_to_list(args.attachments_disposition[0])
 
     if is_attachment_requested(args.attachments):
         add_attachments(message, args.attachments, args.attachments_disposition)
