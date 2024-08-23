@@ -8,15 +8,31 @@ on:
   push:
     branches:
       - main
-  release:
-    types:
-      - published
+    tags:
+      - "v*"
+  pull_request:
+    branches:
+      - main
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+    inputs:
+      stale:
+        description: "Run stale action"
+        required: false
+        type: boolean
+        default: false
 
 env:
   REGISTRY: ghcr.io
 
 jobs:
   build:
+    if: |
+      github.event_name == 'push' && (
+        github.ref == 'refs/heads/main' ||
+        startsWith(github.ref, 'refs/tags/')
+      )
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -52,7 +68,7 @@ jobs:
           tags: |
             ${{ env.REGISTRY }}/${{ github.repository }}:${{ steps.image-tag.outputs.image-tag }}
             ${{ env.REGISTRY }}/${{ github.repository }}:latest
-      - if: github.event_name == 'release' && github.event.action == 'published'
+      - if: startsWith(github.ref, 'refs/tags/')
         name: Build image (stable)
         uses: docker/build-push-action@v6
         with:
@@ -63,6 +79,7 @@ jobs:
             ${{ env.REGISTRY }}/${{ github.repository }}:${{ github.ref_name }}
 
   linter:
+    if: contains(fromJSON('["push", "pull_request"]'), github.event_name)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -110,7 +127,7 @@ jobs:
           attachments-disposition: inline
 
   self-test-stable:
-    if: github.event_name == 'release' && github.event.action == 'published'
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -125,6 +142,7 @@ jobs:
           markdown-body: ${{ github.event.release.body }}
 
   trivy:
+    if: contains(fromJSON('["push", "pull_request"]'), github.event_name)
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -142,3 +160,18 @@ jobs:
           scan-ref: .
           scan-type: ${{ matrix.scan-type }}
           trivy-config: trivy.yaml
+
+  stale:
+    if: |
+      github.event_name == 'schedule' ||
+      (
+        github.event_name == 'workflow_dispatch' &&
+        ${{ github.event.inputs.stale }}
+      )
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # only for delete-branch option
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/stale@v9
