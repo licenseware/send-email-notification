@@ -1,0 +1,14 @@
+quiet: false
+
+debug: false
+
+insecure: false
+
+timeout: 10m
+
+cache-dir: $HOME/.cache/trivy
+
+scan:
+  skip-dirs:
+    - secrets
+    - venv
