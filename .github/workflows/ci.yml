@@ -174,4 +174,5 @@ jobs:
       issues: write
       pull-requests: write
     steps:
-      - uses: actions/stale@v9
+      - name: Stale action
+        uses: actions/stale@v9
