@@ -15,13 +15,6 @@ on:
       - main
   schedule:
     - cron: "0 0 * * *"
-  workflow_dispatch:
-    inputs:
-      stale:
-        description: "Run stale action"
-        required: false
-        type: boolean
-        default: false
 
 env:
   REGISTRY: ghcr.io
@@ -162,12 +155,7 @@ jobs:
           trivy-config: trivy.yaml
 
   stale:
-    if: |
-      github.event_name == 'schedule' ||
-      (
-        github.event_name == 'workflow_dispatch' &&
-        ${{ github.event.inputs.stale }}
-      )
+    if: github.event_name == 'schedule'
     runs-on: ubuntu-latest
     permissions:
       contents: write # only for delete-branch option
