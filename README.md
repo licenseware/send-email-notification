@@ -4,6 +4,17 @@
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](./.pre-commit-config.yaml)
 [![License](https://img.shields.io/github/license/licenseware/send-email-notification)](./LICENSE)
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+- [Send Email Notification](#send-email-notification)
+  - [Send email to one address](#send-email-to-one-address)
+  - [Send email to multiple address upon Github release](#send-email-to-multiple-address-upon-github-release)
+  - [Send email with attachments](#send-email-with-attachments)
+  - [Run Docker Container Locally](#run-docker-container-locally)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 Using [the Python library](https://pypi.org/project/sendgrid/), send email to people
 with the content & subject of your choice.
 
@@ -76,4 +87,25 @@ jobs:
           attachments-disposition: |
             attachment
             attachment
+```
+
+## Run Docker Container Locally
+
+```bash
+export SENDGRID_API_KEY="CHANGE_THIS"
+
+docker run --rm \
+  --name send-email-notification \
+  ghcr.io/licenseware/send-email-notification \
+  --api-key=${SENDGRID_API_KEY} \
+  --from=info@example.com \
+  --to=john@example.com \
+  --subject="Send email notifications" \
+  --markdown-body="""
+# Send email notifications
+
+Checkout this cool repository:
+
+<https://github.com/licenseware/send-email-notification>
+"""
 ```

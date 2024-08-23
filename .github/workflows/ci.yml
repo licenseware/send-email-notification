@@ -1,4 +1,4 @@
-name: build-docker-image
+name: ci
 
 concurrency:
   cancel-in-progress: ${{ ! startsWith(github.ref, 'refs/tags/') }}
@@ -31,7 +31,6 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-          logout: false
       - name: Docker metadata
         id: meta
         uses: docker/metadata-action@v5
