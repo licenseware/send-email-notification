@@ -123,4 +123,3 @@ jobs:
           from-email: ${{ secrets.SENDGRID_FROM_EMAIL }}
           to-email: ${{ secrets.SENDGRID_TO_EMAIL }}
           markdown-body: ${{ github.event.release.body }}
-
