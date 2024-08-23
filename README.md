@@ -1,6 +1,5 @@
 # Send Email Notification
 
-[![Build Image](https://github.com/licenseware/send-email-notification/actions/workflows/build-image.yml/badge.svg)](https://github.com/licenseware/send-email-notification/pkgs/container/send-email-notification)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](./.pre-commit-config.yaml)
 [![License](https://img.shields.io/github/license/licenseware/send-email-notification)](./LICENSE)
 
@@ -9,14 +8,14 @@
 
 - [Send Email Notification](#send-email-notification)
   - [Send email to one address](#send-email-to-one-address)
-  - [Send email to multiple address upon Github release](#send-email-to-multiple-address-upon-github-release)
+  - [Send email to multiple addresses upon Github release](#send-email-to-multiple-addresses-upon-github-release)
   - [Send email with attachments](#send-email-with-attachments)
   - [Run Docker Container Locally](#run-docker-container-locally)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-Using [the Python library](https://pypi.org/project/sendgrid/), send email to people
-with the content & subject of your choice.
+Using [the Sendgrid Python library](https://pypi.org/project/sendgrid/), send
+email to people with the content & subject of your choice.
 
 This repository is used inside Github Actions in the following format:
 
@@ -39,7 +38,7 @@ This repository is used inside Github Actions in the following format:
             Another description
 ```
 
-## Send email to multiple address upon Github release
+## Send email to multiple addresses upon Github release
 
 ```yaml
 on:
@@ -90,6 +89,10 @@ jobs:
 ```
 
 ## Run Docker Container Locally
+
+Grab the latest tag from here:
+
+[![GitHub Tag](https://img.shields.io/github/v/tag/licenseware/send-email-notification?sort=semver&style=plastic&label=latest%20tag&color=light-green)](https://github.com/licenseware/send-email-notification/pkgs/container/send-email-notification)
 
 ```bash
 export SENDGRID_API_KEY="CHANGE_THIS"
