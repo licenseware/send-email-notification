@@ -47,6 +47,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
+          platforms: linux/amd64,linux/arm64
           labels: ${{ steps.meta.outputs.labels }}
           push: true
           tags: |
@@ -123,3 +124,22 @@ jobs:
           from-email: ${{ secrets.SENDGRID_FROM_EMAIL }}
           to-email: ${{ secrets.SENDGRID_TO_EMAIL }}
           markdown-body: ${{ github.event.release.body }}
+
+  trivy:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        scan-type:
+          - fs
+          - config
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Trivy ${{ matrix.scan-type }}
+        uses: aquasecurity/trivy-action@master
+        with:
+          exit-code: "1"
+          scan-ref: .
+          scan-type: ${{ matrix.scan-type }}
+          trivy-config: trivy.yaml
