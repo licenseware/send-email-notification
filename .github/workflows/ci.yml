@@ -22,9 +22,13 @@ env:
 jobs:
   build:
     if: |
-      github.event_name == 'push' && (
-        github.ref == 'refs/heads/main' ||
-        startsWith(github.ref, 'refs/tags/')
+      (
+        github.event_name == 'push' && (
+          github.ref == 'refs/heads/main' ||
+          startsWith(github.ref, 'refs/tags/')
+        )
+      ) || (
+        github.event_name == 'pull_request'
       )
     runs-on: ubuntu-latest
     steps:
@@ -50,6 +54,15 @@ jobs:
         name: Set image tag
         run: |
           echo "image-tag=$(echo ${{ github.sha }} | cut -c 1-7 )" >> $GITHUB_OUTPUT
+      - if: github.event_name == 'pull_request'
+        name: Build image (PR)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          labels: ${{ steps.meta.outputs.labels }}
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
       - if: github.ref == 'refs/heads/main'
         name: Build image (edge)
         uses: docker/build-push-action@v6
