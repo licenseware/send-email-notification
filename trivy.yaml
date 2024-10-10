@@ -12,3 +12,5 @@ scan:
   skip-dirs:
     - secrets
     - venv
+
+ignorefile: .trivyignore
