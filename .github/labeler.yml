@@ -1,0 +1,20 @@
+version: 1
+labels:
+  - label: size/xs
+    size:
+      below: 10
+  - label: size/s
+    size:
+      above: 10
+      below: 50
+  - label: size/m
+    size:
+      above: 50
+      below: 100
+  - label: size/l
+    size:
+      above: 100
+      below: 500
+  - label: size/xl
+    size:
+      above: 500

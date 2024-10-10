@@ -189,3 +189,22 @@ jobs:
         uses: googleapis/release-please-action@v4
         with:
           release-type: simple
+
+  labeler:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' || github.event_name == 'schedule'
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: PR Labeler
+        uses: srvaroa/labeler@master
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+        with:
+          config_path: .github/labeler.yml
+          use_local_config: false
+          fail_on_error: false
