@@ -8,81 +8,77 @@ on:
   push:
     branches:
       - main
-    tags:
-      - "v*"
   pull_request:
     branches:
       - main
   schedule:
     - cron: "0 0 * * *"
 
-env:
-  REGISTRY: ghcr.io
+permissions:
+  contents: read
+  id-token: write
+  packages: write
+  security-events: write
 
 jobs:
-  build:
+  build-edge:
     if: |
-      (
-        github.event_name == 'push' && (
-          github.ref == 'refs/heads/main' ||
-          startsWith(github.ref, 'refs/tags/')
-        )
-      ) || (
-        github.event_name == 'pull_request'
-      )
+      github.event_name == 'push' &&
+      github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-        name: Checkout
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
+      - name: Build docker
+        uses: meysam81/build-docker@main
         with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Docker metadata
-        id: meta
-        uses: docker/metadata-action@v5
+          cosign: true
+          image-name: ghcr.io/${{ github.repository }}
+          image-extra-tags: |
+            ghcr.io/${{ github.repository }}:${{ github.run_id }}
+            ghcr.io/${{ github.repository }}:latest
+          kubescape: true
+          kubescape-upload-sarif: true
+
+  build-pr:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build docker
+        uses: meysam81/build-docker@main
         with:
-          images: |
-            ${{ env.REGISTRY }}/${{ github.repository }}
-      - id: image-tag
-        name: Set image tag
-        run: |
-          echo "image-tag=$(echo ${{ github.sha }} | cut -c 1-7 )" >> $GITHUB_OUTPUT
-      - if: github.event_name == 'pull_request'
-        name: Build image (PR)
-        uses: docker/build-push-action@v6
+          cosign: true
+          image-name: ghcr.io/${{ github.repository }}
+          kubescape: true
+          scout-comment-pr: true
+          scout-compare: true
+          scout-cves: true
+
+  release-please:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    outputs:
+      releases_created: ${{ steps.release-please.outputs.releases_created }}
+      tag_name: ${{ steps.release-please.outputs.tag_name }}
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - id: release-please
+        name: Release please
+        uses: googleapis/release-please-action@v4
         with:
-          context: .
-          platforms: linux/amd64,linux/arm64
-          labels: ${{ steps.meta.outputs.labels }}
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-      - if: github.ref == 'refs/heads/main'
-        name: Build image (edge)
-        uses: docker/build-push-action@v6
+          release-type: simple
+
+  build-stable:
+    needs: release-please
+    if: needs.release-please.outputs.releases_created == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build docker
+        uses: meysam81/build-docker@main
         with:
-          context: .
-          platforms: linux/amd64,linux/arm64
-          labels: ${{ steps.meta.outputs.labels }}
-          push: true
-          tags: |
-            ${{ env.REGISTRY }}/${{ github.repository }}:${{ steps.image-tag.outputs.image-tag }}
-            ${{ env.REGISTRY }}/${{ github.repository }}:latest
-      - if: startsWith(github.ref, 'refs/tags/')
-        name: Build image (stable)
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          labels: ${{ steps.meta.outputs.labels }}
-          push: true
-          tags: |
-            ${{ env.REGISTRY }}/${{ github.repository }}:${{ github.ref_name }}
+          cosign: true
+          image-name: ghcr.io/${{ github.repository }}
+          image-extra-tags: ghcr.io/${{ github.repository }}:${{ needs.release-please.outputs.tag_name }}
 
   linter:
     if: contains(fromJSON('["push", "pull_request"]'), github.event_name)
@@ -98,54 +94,6 @@ jobs:
         run: |
           pip install -U pip pre-commit
           pre-commit run -a
-
-  self-test-edge:
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        name: Checkout
-      - name: Send normal email
-        uses: licenseware/send-email-notification@main
-        with:
-          api-key: ${{ secrets.SENDGRID_API_KEY }}
-          subject: ${{ github.repository }}:${{ github.run_id }}
-          from-email: ${{ secrets.SENDGRID_FROM_EMAIL }}
-          to-email: ${{ secrets.SENDGRID_TO_EMAIL }}
-          markdown-body: |
-            # Hello World
-
-            This is a test email from self-test-action
-      - name: Send email with attachments
-        uses: licenseware/send-email-notification@main
-        with:
-          api-key: ${{ secrets.SENDGRID_API_KEY }}
-          subject: ${{ github.repository }}:${{ github.run_id }}
-          from-email: ${{ secrets.SENDGRID_FROM_EMAIL }}
-          to-email: ${{ secrets.SENDGRID_TO_EMAIL }}
-          markdown-body: |
-            # Hello again
-
-            Check the following sources
-          attachments: |
-            Dockerfile
-            main.py
-          attachments-disposition: inline
-
-  self-test-stable:
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        name: Checkout
-      - name: Send normal email
-        uses: licenseware/send-email-notification@v1
-        with:
-          api-key: ${{ secrets.SENDGRID_API_KEY }}
-          subject: ${{ github.repository }}:${{ github.ref_name }}
-          from-email: ${{ secrets.SENDGRID_FROM_EMAIL }}
-          to-email: ${{ secrets.SENDGRID_TO_EMAIL }}
-          markdown-body: ${{ github.event.release.body }}
 
   trivy:
     if: contains(fromJSON('["push", "pull_request"]'), github.event_name)
@@ -171,7 +119,7 @@ jobs:
     if: github.event_name == 'schedule'
     runs-on: ubuntu-latest
     permissions:
-      contents: write # only for delete-branch option
+      contents: write
       issues: write
       pull-requests: write
     steps:
