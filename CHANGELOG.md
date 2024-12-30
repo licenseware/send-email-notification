@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.1.0](https://github.com/licenseware/send-email-notification/compare/v1.0.0...v1.1.0) (2024-12-30)
+
+
+### Features
+
+* **CI:** add release please and simplify docker build with reusable GHA ([9d716db](https://github.com/licenseware/send-email-notification/commit/9d716db22347289cf5a1cc0e7f798cff13578a4a))
+
+
+### Bug Fixes
+
+* **CI:** remove the duplicate job ([985a2a4](https://github.com/licenseware/send-email-notification/commit/985a2a4279a85fe2c6f7c7cdbcd78c04ac7085c0))
+
 ## 1.0.0 (2024-10-10)
 
 
