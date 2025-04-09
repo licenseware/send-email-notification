@@ -12,7 +12,8 @@ ENV PYTHONUNBUFFERED=1
 FROM python:3.13-alpine AS deps
 
 COPY requirements.txt /
-RUN pip install -U pip wheel && \
+RUN pip install --upgrade pip setuptools && \
+    pip install -U pip wheel && \
     pip wheel --no-cache-dir --no-deps --wheel-dir /wheels -r /requirements.txt
 
 
