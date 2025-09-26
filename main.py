@@ -51,7 +51,13 @@ parser.add_argument(
     help="Email address to send the notification from",
 )
 parser.add_argument("--api-key", type=str, required=True, help="SendGrid API key")
-parser.add_argument("--region", type=str, required=False, help="SendGrid data residency region", default="global")
+parser.add_argument(
+    "--region",
+    type=str,
+    required=False,
+    help="SendGrid data residency region",
+    default="global",
+)
 parser.add_argument(
     "--attachments",
     type=str,
