@@ -11,6 +11,8 @@ inputs:
     required: true
   api-key:
     required: true
+  region:
+    required: false
   subject:
     required: true
   markdown-body:
@@ -27,6 +29,7 @@ runs:
   image: "Dockerfile"
   args:
     - --api-key=${{ inputs.api-key }}
+    - --region=${{ inputs.region }}
     - --from=${{ inputs.from-email }}
     - --to=${{ inputs.to-email }}
     - --subject=${{ inputs.subject }}

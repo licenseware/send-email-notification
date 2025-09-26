@@ -88,6 +88,20 @@ jobs:
             attachment
 ```
 
+## Use eu region
+
+```yaml
+      - uses: licenseware/send-email-notification@v1
+        with:
+          api-key: ${{ secrets.SENDGRID_API_KEY }}
+          region: eu
+          subject: Test Subject
+          from-email: verified-email@licenseware.io
+          to-email: john-doe@licenseware.io
+          markdown-body: |
+            Mail body
+```
+
 ## Run Docker Container Locally
 
 Grab the latest tag from here:
