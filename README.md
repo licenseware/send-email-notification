@@ -22,7 +22,7 @@ This repository is used inside Github Actions in the following format:
 ## Send email to one address
 
 ```yaml
-      - uses: licenseware/send-email-notification@v1
+      - uses: licenseware/send-email-notification@v1.2.0
         with:
           api-key: ${{ secrets.SENDGRID_API_KEY }}
           subject: Test Subject
@@ -58,7 +58,7 @@ jobs:
           - receiver3@licenseware.io
 
     steps:
-      - uses: licenseware/send-email-notification@v1
+      - uses: licenseware/send-email-notification@v1.2.0
         with:
           api-key: ${{ secrets.SENDGRID_API_KEY }}
           subject: New Release ${{ github.repository }}:${{ github.ref_name }}
@@ -71,7 +71,7 @@ jobs:
 ## Send email with attachments
 
 ```yaml
-      - uses: licenseware/send-email-notification@v1
+      - uses: licenseware/send-email-notification@v1.2.0
         with:
           api-key: ${{ secrets.SENDGRID_API_KEY }}
           subject: Test Subject
@@ -91,7 +91,7 @@ jobs:
 ## Use eu region
 
 ```yaml
-      - uses: licenseware/send-email-notification@v1
+      - uses: licenseware/send-email-notification@v1.2.0
         with:
           api-key: ${{ secrets.SENDGRID_API_KEY }}
           region: eu
