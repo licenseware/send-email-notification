@@ -52,6 +52,13 @@ parser.add_argument(
 )
 parser.add_argument("--api-key", type=str, required=True, help="SendGrid API key")
 parser.add_argument(
+    "--region",
+    type=str,
+    required=False,
+    help="SendGrid data residency region",
+    default="global",
+)
+parser.add_argument(
     "--attachments",
     type=str,
     nargs="*",
@@ -132,6 +139,7 @@ if __name__ == "__main__":
 
     try:
         sg = SendGridAPIClient(args.api_key)
+        sg.set_sendgrid_data_residency(args.region)
         response = sg.send(message)
         print(response.status_code)
         print(response.body)
