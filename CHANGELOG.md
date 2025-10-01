@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.2.0](https://github.com/licenseware/send-email-notification/compare/v1.1.0...v1.2.0) (2025-10-01)
+
+
+### Features
+
+* add option to use another sendgrid data residency region ([#27](https://github.com/licenseware/send-email-notification/issues/27)) ([3d80e99](https://github.com/licenseware/send-email-notification/commit/3d80e993a7f36b09867e09963ceb214079e09dd6))
+
+
+### Bug Fixes
+
+* **docs:** pin version in the readme ([9b4cd61](https://github.com/licenseware/send-email-notification/commit/9b4cd6151bdd218e505808c50161c04321436591))
+
 ## [1.1.0](https://github.com/licenseware/send-email-notification/compare/v1.0.0...v1.1.0) (2024-12-30)
 
 
