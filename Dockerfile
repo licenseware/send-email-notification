@@ -1,4 +1,4 @@
-FROM python:3.13-alpine AS base
+FROM python:3.14-alpine AS base
 
 LABEL author="Meysam Azad <meysam@licenseware.io>"
 
@@ -9,7 +9,7 @@ RUN addgroup -S licenseware && \
 
 ENV PYTHONUNBUFFERED=1
 
-FROM python:3.13-alpine AS deps
+FROM python:3.14-alpine AS deps
 
 COPY requirements.txt /
 RUN pip install -U pip wheel && \
