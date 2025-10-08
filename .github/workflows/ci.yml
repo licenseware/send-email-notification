@@ -84,7 +84,7 @@ jobs:
     if: contains(fromJSON('["push", "pull_request"]'), github.event_name)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         name: Checkout
       - uses: actions/setup-python@v6
         with:
@@ -106,7 +106,7 @@ jobs:
           - config
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Trivy ${{ matrix.scan-type }}
         uses: aquasecurity/trivy-action@master
         with:
@@ -135,7 +135,7 @@ jobs:
       issues: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: PR Labeler
         uses: srvaroa/labeler@master
         env:
