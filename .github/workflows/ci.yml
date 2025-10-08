@@ -124,7 +124,7 @@ jobs:
       pull-requests: write
     steps:
       - name: Stale action
-        uses: actions/stale@v9
+        uses: actions/stale@v10
 
   labeler:
     runs-on: ubuntu-latest
