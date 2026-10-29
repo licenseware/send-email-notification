@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Build docker
-        uses: meysam81/build-docker@main
+        uses: meysam81/build-docker@4702dd58cc9a0c0499fbdfe1e1bf8c23d4bc7c8c # v1.7.3
         with:
           cosign: true
           image-name: ghcr.io/${{ github.repository }}
@@ -43,7 +43,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Build docker
-        uses: meysam81/build-docker@main
+        uses: meysam81/build-docker@4702dd58cc9a0c0499fbdfe1e1bf8c23d4bc7c8c # v1.7.3
         with:
           cosign: true
           image-name: ghcr.io/${{ github.repository }}
@@ -64,7 +64,7 @@ jobs:
     steps:
       - id: release-please
         name: Release please
-        uses: googleapis/release-please-action@v4
+        uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5.0.0
         with:
           release-type: simple
 
@@ -74,7 +74,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Build docker
-        uses: meysam81/build-docker@main
+        uses: meysam81/build-docker@4702dd58cc9a0c0499fbdfe1e1bf8c23d4bc7c8c # v1.7.3
         with:
           cosign: true
           image-name: ghcr.io/${{ github.repository }}
@@ -84,9 +84,9 @@ jobs:
     if: contains(fromJSON('["push", "pull_request"]'), github.event_name)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         name: Checkout
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: "3.14"
           architecture: "x64"
@@ -106,9 +106,9 @@ jobs:
           - config
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Trivy ${{ matrix.scan-type }}
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
           exit-code: "1"
           scan-ref: .
@@ -124,7 +124,7 @@ jobs:
       pull-requests: write
     steps:
       - name: Stale action
-        uses: actions/stale@v10
+        uses: actions/stale@4391f3da665fdf50b6810c1a66712fb9ba21aa93 # v11.0.0
 
   labeler:
     runs-on: ubuntu-latest
@@ -135,9 +135,9 @@ jobs:
       issues: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: PR Labeler
-        uses: srvaroa/labeler@master
+        uses: srvaroa/labeler@bf262763a8a8e191f5847873aecc0f29df84f957 # v1.14.0
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         with:
